@@ -43,13 +43,23 @@ def pairwise_accuracy(guids, preds, labels):
     acc = 0.0  # The accuracy to return.
     
     ########################################################
-    # TODO: Please finish the pairwise accuracy computation.
+    # Please finish the pairwise accuracy computation.
     # Hint: Utilize the `guid` as the `guid` for each
     # statement coming from the same complementary
     # pair is identical. You can simply pair the these
     # predictions and labels w.r.t the `guid`. 
-    raise NotImplementedError("Please finish the TODO!")
-    # End of TODO
+    guid_to_num_correct = {}
+    for guid, pred, label in zip(guids, preds, labels):
+        if guid not in guid_to_num_correct:
+            guid_to_num_correct[guid] = 0
+        if pred == label:
+            guid_to_num_correct[guid] += 1
+
+    correct_preds = 0
+    for _, num_correct in guid_to_num_correct.items():
+        if num_correct == 2: # both pairs must be correct
+            correct_preds += 1
+    acc = correct_preds / len(guid_to_num_correct)
     ########################################################
      
     return acc
