@@ -6,6 +6,7 @@ import logging
 import os
 from enum import Enum
 from typing import List, Optional, Union
+from sklearn import metrics
 
 import tqdm
 import numpy as np
@@ -25,13 +26,14 @@ def evaluate_standard(preds, labels, scoring_method):
     acc, prec, recall, f1 = 0.0, 0.0, 0.0, 0.0
 
     ########################################################
-    # TODO: Please finish the standard evaluation metrics.
     # You need to compute the accuracy, precision, recall
     # and F1 score for the predictions and gold labels.
     # Please also make your sci-kit learn scores are computed
     # using `scoring_method` for the `average` argument.
-    raise NotImplementedError("Please finish the TODO!")
-    # End of TODO
+    acc = metrics.accuracy_score(y_true=labels, y_pred=preds)
+    prec = metrics.precision_score(y_true=labels, y_pred=preds, average=scoring_method)
+    recall = metrics.recall_score(y_true=labels, y_pred=preds, average=scoring_method)
+    f1 = metrics.f1_score(y_true=labels, y_pred=preds, average=scoring_method)
     ########################################################
 
     return acc, prec, recall, f1
