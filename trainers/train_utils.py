@@ -6,6 +6,7 @@ import logging
 import os
 from enum import Enum
 from typing import List, Optional, Union
+from sklearn import metrics
 
 import tqdm
 import numpy as np
@@ -25,13 +26,14 @@ def evaluate_standard(preds, labels, scoring_method):
     acc, prec, recall, f1 = 0.0, 0.0, 0.0, 0.0
 
     ########################################################
-    # TODO: Please finish the standard evaluation metrics.
     # You need to compute the accuracy, precision, recall
     # and F1 score for the predictions and gold labels.
     # Please also make your sci-kit learn scores are computed
     # using `scoring_method` for the `average` argument.
-    raise NotImplementedError("Please finish the TODO!")
-    # End of TODO
+    acc = metrics.accuracy_score(y_true=labels, y_pred=preds)
+    prec = metrics.precision_score(y_true=labels, y_pred=preds, average=scoring_method)
+    recall = metrics.recall_score(y_true=labels, y_pred=preds, average=scoring_method)
+    f1 = metrics.f1_score(y_true=labels, y_pred=preds, average=scoring_method)
     ########################################################
 
     return acc, prec, recall, f1
@@ -41,13 +43,23 @@ def pairwise_accuracy(guids, preds, labels):
     acc = 0.0  # The accuracy to return.
     
     ########################################################
-    # TODO: Please finish the pairwise accuracy computation.
+    # Please finish the pairwise accuracy computation.
     # Hint: Utilize the `guid` as the `guid` for each
     # statement coming from the same complementary
     # pair is identical. You can simply pair the these
     # predictions and labels w.r.t the `guid`. 
-    raise NotImplementedError("Please finish the TODO!")
-    # End of TODO
+    guid_to_num_correct = {}
+    for guid, pred, label in zip(guids, preds, labels):
+        if guid not in guid_to_num_correct:
+            guid_to_num_correct[guid] = 0
+        if pred == label:
+            guid_to_num_correct[guid] += 1
+
+    correct_preds = 0
+    for _, num_correct in guid_to_num_correct.items():
+        if num_correct == 2: # both pairs must be correct
+            correct_preds += 1
+    acc = correct_preds / len(guid_to_num_correct)
     ########################################################
      
     return acc
