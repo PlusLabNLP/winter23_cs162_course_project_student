@@ -310,7 +310,6 @@ def train(args, train_dataset, model, tokenizer):
 
 
 def evaluate(args, model, tokenizer, prefix="", data_split="test"):
-
     # Main evaluation loop.
     results = {}
     eval_dataset = load_and_cache_examples(args, args.task_name,
@@ -610,23 +609,28 @@ def main():
     # model classes correctly. Check the documentation
     # for essential args.
 
+    # BERT, RoBERTa, and DeBERTa
+
     # (1) Load config
-    raise NotImplementedError("Please finish the TODO!")
+    config = AutoConfig.from_pretrained(args.model_name_or_path)
+    #raise NotImplementedError("Please finish the TODO!")
 
     # (2) Load tokenizer
-    raise NotImplementedError("Please finish the TODO!")
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
+    #raise NotImplementedError("Please finish the TODO!")
 
     if args.training_phase == "pretrain":
         # (3) Load MLM model if pretraining (Optional)
         # Complete only if doing MLM pretraining for improving performance
-        raise NotImplementedError("Please finish the TODO!")
+        model = AutoModel.from_pretrained(config)
+        #raise NotImplementedError("Please finish the TODO!")
     else:
         # (4) Load sequence classification model otherwise
-        raise NotImplementedError("Please finish the TODO!")
+        model = AutoModel.from_config(config)
+        #raise NotImplementedError("Please finish the TODO!")
 
     # End of TODO.
     ##################################################
-
     # Loads models onto the device (gpu or cpu).
     model.to(args.device)
     print(model)
