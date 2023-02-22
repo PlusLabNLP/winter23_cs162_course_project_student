@@ -138,9 +138,33 @@ class SemEvalDataset(Dataset):
         # the outputs of tokenizer for certain types of
         # models (e.g. RoBERTa), please take special care
         # of it with an if-else statement.
-        raise NotImplementedError("Please finish the TODO!")
         # End of TODO.
         ##################################################
+        example = self.examples[idx]
+        guid = example.guid
+        text = example.text
+        label = example.label
+
+        labels = []
+
+        batch_encoding = self.tokenizer(
+            text,
+            add_special_tokens=True,
+            max_length=self.max_seq_length,
+            padding="max_length",
+            truncation=True,
+        )
+
+        if label is not None:
+            labels = torch.Tensor([label]).long()[0]
+
+        input_ids = torch.Tensor(batch_encoding["input_ids"]).long()
+        attention_mask = torch.Tensor(batch_encoding["attention_mask"]).long()
+
+        if "token_type_ids" not in batch_encoding:
+            token_type_ids = torch.zeros_like(input_ids)
+        else:
+            token_type_ids = torch.Tensor(batch_encoding["token_type_ids"]).long()
 
         label = example.label
         if label is not None:
@@ -196,13 +220,34 @@ class Com2SenseDataset(Dataset):
         # the outputs of tokenizer for certain types of
         # models (e.g. RoBERTa), please take special care
         # of it with an if-else statement.
-        raise NotImplementedError("Please finish the TODO!")
         # End of TODO.
         ##################################################
 
+        example = self.examples[idx]
+        guid = example.guid
+        text = example.text
         label = example.label
+
+        labels = []
+
+        batch_encoding = self.tokenizer(
+            text,
+            add_special_tokens=True,
+            max_length=self.max_seq_length,
+            padding="max_length",
+            truncation=True,
+        )
+
         if label is not None:
             labels = torch.Tensor([label]).long()[0]
+
+        input_ids = torch.Tensor(batch_encoding["input_ids"]).long()
+        attention_mask = torch.Tensor(batch_encoding["attention_mask"]).long()
+
+        if "token_type_ids" not in batch_encoding:
+            token_type_ids = torch.zeros_like(input_ids)
+        else:
+            token_type_ids = torch.Tensor(batch_encoding["token_type_ids"]).long()
 
         if not self.args.do_train:
             if label is None:

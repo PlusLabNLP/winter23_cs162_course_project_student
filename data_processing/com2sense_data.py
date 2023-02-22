@@ -71,8 +71,8 @@ class Com2SenseDataProcessor(DataProcessor):
             text_1 = datum.get("sent_1")
             text_2 = datum.get("sent_2")
 
-            label_1 = datum.get("label_1", None)
-            label_2 = datum.get("label_2", None)
+            label_1 = self.label2int[datum["label_1"]] if "label_1" in datum else None
+            label_2 = self.label2int[datum["label_2"]] if "label_2" in datum else None
 
             domain = datum.get("domain", None)
             scenario = datum.get("scenario", None)
@@ -85,7 +85,6 @@ class Com2SenseDataProcessor(DataProcessor):
                 scenario=scenario, 
                 numeracy=numeracy
             )
-            print(example_1)
             example_2 = Coms2SenseSingleSentenceExample(
                 guid, text_2, 
                 label=label_2, 
