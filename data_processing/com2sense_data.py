@@ -66,7 +66,7 @@ class Com2SenseDataProcessor(DataProcessor):
         json_path = os.path.join(data_dir, split+'.json')
         data = json.load(open(json_path, 'r'))
 
-        for index, datum in enumerate(data):
+        for index, datum in enumerate(data[:3]):
             guid = index
             text_1 = datum.get("sent_1")
             text_2 = datum.get("sent_2")
@@ -76,7 +76,7 @@ class Com2SenseDataProcessor(DataProcessor):
 
             domain = datum.get("domain", None)
             scenario = datum.get("scenario", None)
-            numeracy = datum["numeracy"] == "True" if "numeracy" in datum else None
+            numeracy = datum["numeracy"]=="True" if "numeracy" in datum else None
 
             example_1 = Coms2SenseSingleSentenceExample(
                 guid, text_1, 
@@ -85,6 +85,7 @@ class Com2SenseDataProcessor(DataProcessor):
                 scenario=scenario, 
                 numeracy=numeracy
             )
+            print(example_1)
             example_2 = Coms2SenseSingleSentenceExample(
                 guid, text_2, 
                 label=label_2, 
