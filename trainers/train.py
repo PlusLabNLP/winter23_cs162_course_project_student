@@ -207,10 +207,12 @@ def train(args, train_dataset, model, tokenizer):
                 inputs["token_type_ids"] = None
 
             if args.training_phase == "pretrain":
-                masked_inputs, lm_labels = mask_tokens(
+                # masked_inputs, lm_labels = mask_tokens(
+                #     inputs["input_ids"], tokenizer, args)
+                # inputs["input_ids"] = masked_inputs
+                # inputs["labels"] = lm_labels
+                inputs["input_ids"], inputs["labels"] = mask_tokens(
                     inputs["input_ids"], tokenizer, args)
-                inputs["input_ids"] = masked_inputs
-                inputs["labels"] = lm_labels
 
             ##################################################
             # TODO: Training Loop
@@ -371,10 +373,8 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
                 inputs["token_type_ids"] = None
 
             if args.training_phase == "pretrain":
-                masked_inputs, lm_labels = mask_tokens(
+                inputs["input_ids"], inputs["labels"] = mask_tokens(
                     inputs["input_ids"], tokenizer, args)
-                inputs["input_ids"] = masked_inputs
-                inputs["labels"] = lm_labels
 
             ##################################################
             # TODO: Evaluation Loop
