@@ -220,7 +220,7 @@ class Com2SenseDataset(Dataset):
         # of it with an if-else statement.
         # raise NotImplementedError("Please finish the TODO!")
         example = self.examples[idx]
-        guid = example.guid
+        guid = torch.Tensor([int(example.guid)]).long()
         text = example.text
         example.label = 1 if example.label=='True' else 0
 
