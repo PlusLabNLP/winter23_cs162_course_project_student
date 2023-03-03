@@ -220,7 +220,7 @@ def train(args, train_dataset, model, tokenizer):
             # the loss from the model outputs.
             #raise NotImplementedError("Please finish the TODO!")
 
-            outputs = model(inputs)
+            outputs = model(**inputs)
             loss = outputs[0]
 
             if args.n_gpu > 1:
@@ -381,9 +381,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # (1) Run forward and get the model outputs
             #raise NotImplementedError("Please finish the TODO!")
             
-
-                outputs = model(inputs)
-
+            outputs = model(**inputs)
 
             if has_label or args.training_phase == "pretrain":
                 # (2) If label present or pretraining, compute the loss and prediction logits
@@ -393,22 +391,26 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
                 # indexing properly the outputs as tuples.
                 # Make sure to perform a `.mean()` on the eval loss and add it
                 # to the `eval_loss` variable.
-                from torch.nn import functional as F
-                labels = torch.tensor([1,0]).unsqueeze(0)
-                logits = outputs[0]
-                loss = F.cross_entropy(labels, logits)
-                eval_loss = loss.mean()
+                        # from torch.nn import functional as F
+                        # labels = torch.tensor([1,0]).unsqueeze(0)
+                        # logits = outputs[0]
+                        # loss = F.cross_entropy(labels, logits)
+                        # eval_loss = loss.mean()
+                loss = outputs.loss
+                logits = outputs.logits
+                eval_loss += loss.mean().item()
 
                 #raise NotImplementedError("Please finish the TODO!")
             else:
                 # (3) If labels not present, only compute the prediction logits
                 # Label the logits as `logits`
-                logits = outputs[0]
+                logits = outputs.logits
                 #raise NotImplementedError("Please finish the TODO!")
 
             # (4) Convert logits into probability distribution and relabel as `logits`
             # Hint: Refer to Softmax function
-            raise NotImplementedError("Please finish the TODO!")
+            #raise NotImplementedError("Please finish the TODO!")
+            logits = torch.nn.functional.softmax(logits, dim=-1)
 
             # End of TODO.
             ##################################################
