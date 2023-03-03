@@ -11,6 +11,7 @@ import tqdm
 import numpy as np
 
 import torch
+
 from transformers import (
     WEIGHTS_NAME,
     AdamW,
@@ -19,7 +20,6 @@ from transformers import (
     AutoTokenizer,
 )
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-
 
 def evaluate_standard(preds, labels, scoring_method):
 
@@ -54,8 +54,17 @@ def pairwise_accuracy(guids, preds, labels):
     # Hint: Utilize the `guid` as the `guid` for each
     # statement coming from the same complementary
     # pair is identical. You can simply pair the these
-    # predictions and labels w.r.t the `guid`.
-    raise NotImplementedError("Please finish the TODO!")
+    # predictions and labels w.r.t the `guid`. 
+    
+    sort_idx = np.argsort(guids)
+    num_pair= int(len(guids)/2)
+
+    preds= preds[sort_idx].reshape(-1,2)
+    labels= labels[sort_idx].reshape(-1,2)
+
+    acc = ((preds == labels).sum(axis=1))-1
+    acc = acc.sum()/num_pair
+
     # End of TODO
     ########################################################
 
@@ -68,8 +77,9 @@ if __name__ == "__main__":
     guids = [0, 0, 1, 1, 2, 2, 3, 3]
     preds = np.asarray([0, 0, 1, 0, 0, 1, 1, 1])
     labels = np.asarray([1, 0, 1, 1, 0, 1, 1, 1])
+
     acc, prec, rec, f1 = evaluate_standard(preds, labels, "binary")
-    # pair_acc = pairwise_accuracy(guids, preds, labels)
+    pair_acc = pairwise_accuracy(guids, preds, labels)
 
     if acc == 0.75 and prec == 1.0 and round(rec, 2) == 0.67 and f1 == 0.8:
         print("Your `evaluate_standard` function is correct!")
@@ -77,8 +87,8 @@ if __name__ == "__main__":
         raise NotImplementedError(
             "Your `evaluate_standard` function is INCORRECT!")
 
-    # if pair_acc == 0.5:
-    #     print("Your `pairwise_accuracy` function is correct!")
-    # else:
-    #     raise NotImplementedError(
-    #         "Your `pairwise_accuracy` function is INCORRECT!")
+    if pair_acc == 0.5:
+        print("Your `pairwise_accuracy` function is correct!")
+    else:
+        raise NotImplementedError(
+             "Your `pairwise_accuracy` function is INCORRECT!")
