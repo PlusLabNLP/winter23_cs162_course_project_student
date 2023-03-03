@@ -69,14 +69,14 @@ class Com2SenseDataProcessor(DataProcessor):
         for i in range(len(data)):
             datum = data[i]
             sentence_1,sentence_2  = datum["sent_1"], datum["sent_2"]
-            label_1,label_2  = datum["label_1"], datum["label_2"]
+            # label_1,label_2  = datum["label_1"], datum["label_2"]
             domain=datum['domain']
             scenario=datum['scenario']
             numeracy = bool(self.label2int[datum['numeracy']])
 
             label_value = None
-            if label_1 in datum:
-                label_value = self.label2int[label_1]
+            if 'label_1' in datum:
+                label_value = self.label2int[datum['label_1']]
 
             example_1 = Coms2SenseSingleSentenceExample(
                 guid=str(i),
@@ -88,8 +88,8 @@ class Com2SenseDataProcessor(DataProcessor):
             )
 
             label_value = None
-            if label_2 in datum:
-                label_value = self.label2int[label_2]
+            if 'label_2' in datum:
+                label_value = self.label2int[datum['label_2']]
 
             example_2 = Coms2SenseSingleSentenceExample(
                 guid=str(i),
