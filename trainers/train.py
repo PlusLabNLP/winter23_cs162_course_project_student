@@ -638,11 +638,11 @@ def main():
     if args.training_phase == "pretrain":
         # (3) Load MLM model if pretraining (Optional)
         # Complete only if doing MLM pretraining for improving performance
-        model = AutoModel.from_pretrained(config)
+        model = AutoModelForMaskedLM.from_pretrained(args.model_name_or_path, config=config)
         #raise NotImplementedError("Please finish the TODO!")
     else:
         # (4) Load sequence classification model otherwise
-        model = AutoModel.from_config(config)
+        model = AutoModelForSequenceClassification.from_pretrained(args.model_name_or_path, config=config)
         #raise NotImplementedError("Please finish the TODO!")
 
     # End of TODO.
